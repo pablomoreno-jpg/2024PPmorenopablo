@@ -1,0 +1,21 @@
+table{
+    border-collapse: collapse;
+    letter-spacing: 1px;
+
+}
+
+td{
+    border: 2px solid;
+    align-items: center;
+    padding: 4px 5px;
+    text-align: center;
+}
+
+main{
+    margin: 20px;
+}
+
+label{
+    
+    padding: 2px;
+}

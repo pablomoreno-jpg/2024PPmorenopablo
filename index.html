@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=divice-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+
+        <script>
+            
+            class Veiculo {
+                id = 0;
+                modelo = "";
+                anioFab = 0;
+                velMax = 0;
+
+                constructor(v_id,v_modelo,v_anio,v_vel){
+                     
+                    this.id = v_id;
+                    this.modelo = v_modelo;
+                    this.anioFab = v_anio;
+                    this.velMax = v_vel;
+
+                }
+
+                toString(){
+
+                    return "id = " + this.id+"modelo = " + this.modelo+"año de fabricacion = " + this.anioFab+"velocida maxima= " + this.velMax;
+                }
+               
+            }
+
+            class Aereo extends Veiculo{
+
+                altMax = 0;
+                autonomia = 0;
+
+                constructor(a_id,a_modelo,a_anio,a_vel,a_altura,a_autonomia){
+                    
+                    super(a_id,a_modelo, a_anio,a_vel)
+                    this.altMax = a_altura;
+                    this.autonomia = a_autonomia;
+                }
+
+                toString(){
+
+                    return this.toString()+"altuta maxima ="+ this.altMax+"autonomia ="+this.autonomia;
+                }
+
+            }
+
+            class terreste extends Veiculo{
+
+                cantPue = 0;
+                cantRue = 0;
+
+                constructor(t_id,t_modelo,t_anio,t_vel,t_cantPue,t_cantRue){
+                    
+                    super(t_id,t_modelo,t_anio,t_vel);
+                    this.cantPue = t_cantPue;
+                    this.cantRue = t_cantRue;
+                }
+
+                toString(){
+
+                    return this.toString()+"cantidad de pue ="+ this.t_cantPue+"cantidad de ruedo ="+this.t_cantRue;
+
+                }
+            }
+
+            var arrayString = [{"id":14, "modelo":"Ferrari F100", "anoFab":1998, "velMax":400, "cantPue":2, "cantRue":4},
+                         {"id":51, "modelo":"DodgeViper", "anoFab":1991, "velMax":266, "cantPue":2, "cantRue":4},{"id":67, "modelo":"Boeing CH-47 Chinook",
+                         "anoFab":1962, "velMax":302, "altMax":6, "autonomia":1200},{"id":666, "modelo":"Aprilia RSV 1000 R",
+                         "anoFab":2004, "velMax":280, "cantPue":0, "cantRue":2},{"id":872, "modelo":"Boeing 747-400", "anoFab":1989,
+                         "velMax":988, "altMax":13, "autonomia":13450},{"id":742, "modelo":"Cessna CH-1 SkyhookR", "anoFab":1953,
+                         "velMax":174, "altMax":3, "autonomia":870}];
+            
+            var lista = [];
+
+            arrayString.forEach( (veiculo) => {
+
+                if(typeof veiculo.altMax != "undefined" && typeof veiculo.autonomia != "undefined"){
+
+                   var elemento = new Aereo(veiculo.id,veiculo.modelo,veiculo.anoFab,veiculo.velMax,veiculo.altMax,veiculo.autonomia);
+                }
+                else if(typeof veiculo.cantPue != "undefined" && typeof veiculo.cantRue != "undefined"){
+
+                    var elemento = new terreste(veiculo.id,veiculo.modelo,veiculo.anoFab,veiculo.velMax,veiculo.cantPue,veiculo.cantRue);
+                }
+                else{
+
+                    var elemento = new Veiculo(veiculo.id,veiculo.modelo,veiculo.anoFab,veiculo.velMax)
+                }
+
+                lista.push(elemento);
+
+            })
+
+            function filtrar(array){
+
+                var listaFiltrada = array.filter((auto) => {
+
+                    var filtro = document.getElementById("filtros");
+
+                    if((filtro.value == "2" && auto instanceof Aereo) || filtro.value == "1"){
+
+                        return true;
+                    }
+                    else if((filtro.value == "3" && auto instanceof terreste) || filtro.value == "1"){
+
+                        return true;
+                    }
+
+
+                });
+
+                return listaFiltrada;
+
+            }
+
+            function cargarTabla(array){
+
+                var tabla = document.getElementById("veiculos");
+
+                var filtrado = filtrar(array);
+
+                console.log(filtrado)
+
+                filtrado.forEach( element => {
+
+                    var linea = document.createElement("tr");
+
+                    if(document.getElementById("ckid").checked){
+
+                        var celda = document.createElement("td");
+                        celda.appendChild(document.createTextNode(element.id));
+
+                        linea.appendChild(celda);
+
+                    }
+
+                    if(document.getElementById("ckModelo").checked){
+
+                        var celda = document.createElement("td");
+                        celda.appendChild(document.createTextNode(element.modelo));
+
+                        linea.appendChild(celda);
+
+                    }
+
+                    if(document.getElementById("ckAnio").checked){
+
+                        var celda = document.createElement("td");
+                        celda.appendChild(document.createTextNode(element.anioFab));
+
+                        linea.appendChild(celda);
+
+                    }
+
+                    if(document.getElementById("ckVelocidad").checked){
+
+                        var celda = document.createElement("td");
+
+                        if(element instanceof Aereo){
+
+                            celda.appendChild(document.createTextNode(element.velMax));
+                        }
+                        else{
+
+                            celda.appendChild(document.createTextNode("--"));
+                        }
+
+                        linea.appendChild(celda);
+
+                    }
+
+                    if(document.getElementById("ckPue").checked){
+
+                        var celda = document.createElement("td")
+                        if(element instanceof terreste){
+
+                            celda.appendChild(document.createTextNode(element.cantPue));
+                        }
+                        else{
+
+                            celda.appendChild(document.createTextNode("--"));
+
+                        }
+
+                        linea.appendChild(celda);
+
+                    }
+
+                    if(document.getElementById("ckRue").checked){
+
+                        var celda = document.createElement("td");
+                        if(element instanceof terreste){
+
+                            celda.appendChild(document.createTextNode(element.cantRue));
+                        }
+                        else{
+
+                            celda.appendChild(document.createTextNode("--"));
+
+                        }
+
+                        linea.appendChild(celda);
+
+                    }
+
+                    if(document.getElementById("ckaltura").checked){
+
+                        var celda = document.createElement("td");
+
+                        if(element instanceof Aereo){
+
+                            celda.appendChild(document.createTextNode(element.altMax));
+                        }
+                        else{
+
+                            celda.appendChild(document.createTextNode("--"));
+                        }
+                        
+                        linea.appendChild(celda);
+
+                    }
+
+                    if(document.getElementById("ckauto").checked){
+
+                        var celda = document.createElement("td")
+
+                        if(element instanceof Aereo){
+
+                            celda.appendChild(document.createTextNode(element.autonomia));
+                        }
+                        else{
+
+                            celda.appendChild(document.createTextNode("--"));
+                        }
+
+                        linea.appendChild(celda);
+
+                    }
+
+                    tabla.appendChild(linea);
+                }); 
+
+
+
+            }
+
+            function crearTabla(array){
+
+                var tabla = document.getElementById("veiculos");
+
+                var cabezera = document.createElement("tr");
+
+                if(document.getElementById("ckid").checked){
+
+                    var cajaId = document.createElement("td");
+                    var botonId = document.createElement("input");
+
+                    botonId.setAttribute("type","button");
+                    botonId.setAttribute("value","ID");
+                    botonId.setAttribute("id","fId");
+
+                    cajaId.appendChild(botonId);
+
+                    cabezera.appendChild(cajaId);
+
+                }
+                
+                if(document.getElementById("ckModelo").checked){
+
+                    var cajaModelo = document.createElement("td");
+                    var botonMOl = document.createElement("input");
+
+                    botonMOl.setAttribute("type","button");
+                    botonMOl.setAttribute("value","Modelo");
+                    botonMOl.setAttribute("id","fmol");
+
+                    cajaModelo.appendChild(botonMOl);
+
+                    cabezera.appendChild(cajaModelo);
+
+                }    
+                
+                if(document.getElementById("ckAnio").checked){
+
+                    var cajaAnio = document.createElement("td");
+                    var botonAnio = document.createElement("input");
+
+                    botonAnio.setAttribute("type","button");
+                    botonAnio.setAttribute("value","Año fab");
+                    botonAnio.setAttribute("id","fanio");
+
+                    cajaAnio.appendChild(botonAnio);
+
+                    cabezera.appendChild(cajaAnio);
+
+                }    
+                                          
+                if(document.getElementById("ckVelocidad").checked){
+
+                    var cajaVel = document.createElement("td");
+                    var botonVel = document.createElement("input");
+
+                    botonVel.setAttribute("type","button");
+                    botonVel.setAttribute("value","velocidad Max");
+                    botonVel.setAttribute("id","fvel");
+
+                    cajaVel.appendChild(botonVel);
+
+                    cabezera.appendChild(cajaVel);
+
+                }    
+                      
+                if(document.getElementById("ckPue").checked){
+
+                    var cajaPue = document.createElement("td");
+                    var botonPue = document.createElement("input");
+
+                    botonPue.setAttribute("type","button");
+                    botonPue.setAttribute("value","cant. pue");
+                    botonPue.setAttribute("id","fpue");
+
+                    cajaPue.appendChild(botonPue);
+
+                    cabezera.appendChild(cajaPue);
+
+                }    
+
+                if(document.getElementById("ckRue").checked){
+
+                    var cajaRue = document.createElement("td");
+                    var botonRue = document.createElement("input");
+
+                    botonRue.setAttribute("type","button");
+                    botonRue.setAttribute("value","cant. rue");
+                    botonRue.setAttribute("id","frue");
+
+                    cajaRue.appendChild(botonRue);
+
+                    cabezera.appendChild(cajaRue);
+
+                }    
+
+                if(document.getElementById("ckaltura").checked){
+
+                    var cajaAltura = document.createElement("td");
+                    var botonAl = document.createElement("input");
+
+                    botonAl.setAttribute("type","button");
+                    botonAl.setAttribute("value","Altura Max");
+                    botonAl.setAttribute("id","fal");
+
+                    cajaAltura.appendChild(botonAl);
+
+                    cabezera.appendChild(cajaAltura);
+
+                }
+
+                if(document.getElementById("ckauto").checked){
+
+                    var cajaAuto = document.createElement("td");
+                    var botonAuto = document.createElement("input");
+
+                    botonAuto.setAttribute("type","button");
+                    botonAuto.setAttribute("value","Atonomia");
+                    botonAuto.setAttribute("id","fauto");
+
+                    cajaAuto.appendChild(botonAuto);
+
+                    cabezera.appendChild(cajaAuto);
+
+                }    
+            
+                tabla.appendChild(cabezera);
+
+                cargarTabla(array);
+            
+            }
+
+            window.addEventListener("DOMContentLoaded", () => {
+                
+                var filtros = document.getElementById("chboxes");
+
+                filtros.addEventListener("change", ()=> {
+
+                    var tabla = document.getElementById("veiculos");
+
+                    tabla.replaceChildren();
+
+                    crearTabla(lista);
+                })
+
+                crearTabla(lista);
+
+            })
+
+  
+
+        </script>
+
+        <title>Primer Parcial</title>
+    </head>
+    <body>
+        <header>
+
+        </header>
+        <main>
+            <form>
+
+                <label>filtrar por:</label>
+                <select id="filtros" name="filtros">
+                    <option value="1">Todos</option>
+                    <option value="2">Aereos</option>
+                    <option value="3">Terrestes</option>
+                </select><br>
+
+                <label>Mostrar Culumnas:</label><br>
+                <section id="chboxes">
+                    <label>ID</label><input type="checkbox" id="ckid" value="0" checked>
+                    <label>modelo</label><input type="checkbox" id="ckModelo" value="1" checked>
+                    <label>Año fabricacion</label><input type="checkbox" id="ckAnio" value="2" checked>
+                    <label>velocidad Max</label><input type="checkbox" id="ckVelocidad" value="3" checked>
+                    <label>cant.Pue</label><input type="checkbox" id="ckPue" value="4" checked>
+                    <label>cant.Rue</label><input type="checkbox" id="ckRue" value="5" checked>
+                    <label>max altura</label><input type="checkbox" id="ckaltura" value="6" checked>
+                    <label>autonomia</label><input type="checkbox" id="ckauto" value="7" checked>
+                </section>
+                <table id="veiculos">
+
+                </table>
+                <br>
+                <input type="button" id="agregar" value="agregar">
+
+            </form>
+
+        </main>
+    </body>
+</html>
