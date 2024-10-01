@@ -159,16 +159,8 @@
                     if(document.getElementById("ckVelocidad").checked){
 
                         var celda = document.createElement("td");
-
-                        if(element instanceof Aereo){
-
-                            celda.appendChild(document.createTextNode(element.velMax));
-                        }
-                        else{
-
-                            celda.appendChild(document.createTextNode("--"));
-                        }
-
+                        celda.appendChild(document.createTextNode(element.velMax));
+    
                         linea.appendChild(celda);
 
                     }
@@ -382,7 +374,13 @@
 
             window.addEventListener("DOMContentLoaded", () => {
                 
+                var calcular = document.getElementById("calcularvelocidad");
+
                 var filtros = document.getElementById("chboxes");
+
+                var selectAmb = document.getElementById("amb_elegir");
+
+                var agregar = document.getElementById("agregar");
 
                 filtros.addEventListener("change", ()=> {
 
@@ -392,6 +390,46 @@
 
                     crearTabla(lista);
                 })
+
+                calcular.addEventListener("click", ()=> {
+
+                    var mostrarPromedio = document.getElementById("t_promedio");
+
+                    var velocidad = 0;
+
+                    lista.forEach( p => {
+
+                        velocidad += p.velMax;
+                    })
+
+                    mostrarPromedio.value = (parseInt(velocidad / lista.length)).toString()
+                })
+
+                agregar.addEventListener("click", () => {
+
+                    var tabla = getElementById("tabla");
+
+                    var formAmb = getElementById("abm");
+
+                    if(formAmb.style.display == '' || formAmb.style.display == 'none' ){
+
+                        formAmb.style.display == 'block';
+                        tabla.style.display = 'none';
+                        agregar.setAttribute("value","Cancelar")
+                        
+
+                    }
+                    else{
+
+                        formAmb.style.display = 'none';
+                        tabla.style.display = 'block';
+                        agregar.setAttribute("value","agregar")
+
+                    }
+
+
+                })
+
 
                 crearTabla(lista);
 
@@ -416,7 +454,10 @@
                     <option value="2">Aereos</option>
                     <option value="3">Terrestes</option>
                 </select><br>
-
+                <label>calcular Velocidad Promedio</label>
+                <input type="text" name="valocidadPromedio" id="t_promedio" value=""/>
+                <input type="button" id="calcularvelocidad" value="calcular"/><br>
+                          
                 <label>Mostrar Culumnas:</label><br>
                 <section id="chboxes">
                     <label>ID</label><input type="checkbox" id="ckid" value="0" checked>
@@ -432,7 +473,28 @@
 
                 </table>
                 <br>
-                <input type="button" id="agregar" value="agregar">
+                <input type="button" id="agregar" value="agregar" >
+
+                <section class="abm" id="abm">
+                    <h2>agregar Veiculo</h2>
+                    <label>Id:</label>
+                    <input type="text" id="amb_id"><br>
+                    <label>Modelo:</label>
+                    <input type="text" id="amb_nombre"><br>
+                    <label>Año de fabricacion:</label>
+                    <input type="text" id="amb_apellido"><br>
+                    <label>Veolcidad Maxima:</label>
+                    <input type="text" id="amb_edad"><br>
+                    <select id="amb_elegir">
+                        <option value="3">Aereo</option>
+                        <option value= "2">Terreste</option>
+                    <div class="botnoeAbm">
+                        <input type="button" id="abm_agregar" value="agregar">
+                        <input type="button" id="abm_modificar" value="modificar">
+                        <input type="button" id="abm_eliminar" value="eliminar">
+
+                    </div>
+                </section>
 
             </form>
 

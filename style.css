@@ -19,3 +19,14 @@ label{
     
     padding: 2px;
 }
+
+     
+.abm{
+
+    display: none;
+}
+
+.botonesAmb{
+
+    display: grid;
+}
